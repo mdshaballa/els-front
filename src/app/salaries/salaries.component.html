@@ -1,0 +1,116 @@
+<p>
+    <mat-toolbar>
+      <span class="fill-remaining-space"></span>
+      <span>Deboublonnee salarie</span>
+      <span class="fill-remaining-space"></span>
+    </mat-toolbar>
+  </p>
+  <div class="search-div">
+    <button mat-raised-button (click)="openDialog()">
+      <mat-icon>add</mat-icon>Create
+    </button>
+    <mat-form-field class="search-form-field" floatLabel="never">
+      <input matInput [(ngModel)]="searchKey"  placeholder="Search" autocomplete="off" (keyup)="applyFilter()">
+      <button mat-button matSuffix mat-icon-button aria-label="Clear" *ngIf="searchKey"  (click)="onSearchClear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort>
+  
+      <!-- Prenom Column -->
+      <ng-container matColumnDef="prenom">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Prenom </th>
+        <td mat-cell *matCellDef="let element"> {{element.prenom}} </td>
+      </ng-container>
+  
+      <!-- Fonction Column -->
+      <ng-container matColumnDef="fonction">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fonction </th>
+        <td mat-cell *matCellDef="let element"> {{element.fonction}} </td>
+      </ng-container>
+  
+      <!-- anneeExperience Column -->
+      <ng-container matColumnDef="anneeExperience">
+        <th mat-header-cell *matHeaderCellDef> Annee Experience </th>
+        <td mat-cell *matCellDef="let element"> {{element.anneesExperience}} </td>
+      </ng-container>
+  
+      <!-- Adress Column -->
+      <ng-container matColumnDef="adress">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Adress </th>
+        <td mat-cell *matCellDef="let element"> {{element.adresse}} </td>
+      </ng-container>
+  
+  
+  
+      <!-- Salarie Column -->
+      <ng-container matColumnDef="salarie">
+        <th mat-header-cell *matHeaderCellDef> Salarie </th>
+        <td mat-cell *matCellDef="let element"> {{element.salaire}} </td>
+      </ng-container>
+  
+       <!-- DateNaissance Column -->
+       <ng-container matColumnDef="dateNaissance">
+        <th mat-header-cell *matHeaderCellDef> Date de Naissance </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateNaissance | date: 'yyyy-MM-dd'}} </td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button (click)="editSalarie(element)"><mat-icon>launch</mat-icon></button>
+          <button mat-icon-button color="warn" (click)="removeSalarie(element.id)"><mat-icon>delete_outline</mat-icon></button>
+        </td>
+      </ng-container>
+      <!-- Loading Data -->
+      <ng-container matColumnDef="loading">
+        <mat-footer-cell *matFooterCellDef colspan="6">
+          <mat-spinner></mat-spinner>
+        </mat-footer-cell>
+      </ng-container>
+      <!-- if no Data -->
+      <ng-container matColumnDef="noData">
+        <mat-footer-cell *matFooterCellDef colspan="6">
+          No data.
+        </mat-footer-cell>
+      </ng-container>
+  
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <mat-footer-row *matFooterRowDef="['loading']" [ngClass]="{'hide':dataSource!=null}"></mat-footer-row>
+      <mat-footer-row *matFooterRowDef="['noData']" [ngClass]="{'hide':!(dataSource!=null && dataSource.data.length==0)}"></mat-footer-row>
+  
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="5" [length]="total" showFirstLastButtons></mat-paginator>
+  </div>
+  
+  
+    <mat-divider></mat-divider>
+  
+  <div class="second-container">
+  
+  
+  
+    <button mat-stroked-button class="btn-tous" (click)="getSalaries()">Afficher tous</button>
+  
+    <mat-form-field appearance="fill" class="critere">
+      <mat-label>Critere*</mat-label>
+      <mat-select disableRipple #selectCritere>
+        <mat-option value="adresse">Addresse</mat-option>
+        <mat-option value="Fonction">Fonction</mat-option>
+        <mat-option value="Date de naissance">Date de Naissance</mat-option>
+        <mat-option value="années expérience">Années Experience</mat-option>
+        <mat-option value="salaire">salaire</mat-option>
+        <mat-option value="prénom">prénom</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <button mat-raised-button class="btn-doublonne" color="primary" (click)="filtrerParCritere(selectCritere.value)">Dedoublone</button>
+  
+  </div>
+  
